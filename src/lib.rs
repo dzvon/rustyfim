@@ -64,7 +64,7 @@ fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemS
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn fim(_py: Python, m: &PyModule) -> PyResult<()> {
+fn rustyfim(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(fpgrowth, m)?)?;
     Ok(())
 }

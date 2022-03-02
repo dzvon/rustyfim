@@ -77,17 +77,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
-name = "fim"
-version = "0.1.0"
-dependencies = [
- "argparse",
- "fnv",
- "itertools",
- "pyo3",
- "rayon",
-]
-
-[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -334,6 +323,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8380fe0152551244f0747b1bf41737e0f8a74f97a14ccefd1148187271634f3c"
 dependencies = [
  "bitflags",
+]
+
+[[package]]
+name = "rustyfim"
+version = "0.1.0"
+dependencies = [
+ "argparse",
+ "fnv",
+ "itertools",
+ "pyo3",
+ "rayon",
 ]
 
 [[package]]

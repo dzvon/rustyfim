@@ -4,13 +4,13 @@ rusty-py-fim enables you to run fpgrowth in Python
 
 ```bash
 pip install maturin
-maturin develop 
+maturin develop
 ```
 
 Running FIM in python
 
 ```py
-from fim import fpgrowth
+from rustyfim import fpgrowth
 
 res = fpgrowth(min_support=0.3, transactions=[[1,2,3],[2,3,4],[3,4,10],[3,4,20]])
 ```
