@@ -201,8 +201,8 @@ pub struct ItemSet {
 
 impl IntoPy<PyObject> for ItemSet {
     fn into_py(self, py: Python) -> PyObject {
-        // delegates to i32's IntoPy implementation.
-        self.items.into_py(py)
+        // return items and count as tuple
+        (self.items.into_py(py), self.count.into_py(py)).into_py(py)
     }
 }
 

@@ -35,7 +35,6 @@ impl Item {
 
 impl IntoPy<PyObject> for Item {
     fn into_py(self, py: Python) -> PyObject {
-        // delegates to i32's IntoPy implementation.
         self.id.into_py(py)
     }
 }
