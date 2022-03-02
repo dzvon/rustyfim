@@ -30,10 +30,7 @@ fn count_item_frequencies(
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
-fn frequent_itemset_mining(
-    min_support: f32,
-    transactions: Vec<Vec<u32>>,
-) -> PyResult<Vec<ItemSet>> {
+fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemSet>> {
     let start = Instant::now();
     let timer = Instant::now();
     let (item_count, num_transactions) = count_item_frequencies(&transactions).unwrap();
@@ -68,6 +65,6 @@ fn frequent_itemset_mining(
 /// A Python module implemented in Rust.
 #[pymodule]
 fn fim(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(frequent_itemset_mining, m)?)?;
+    m.add_function(wrap_pyfunction!(fpgrowth, m)?)?;
     Ok(())
 }

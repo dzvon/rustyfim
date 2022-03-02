@@ -1,41 +1,24 @@
-# arm-rs
-[![Build Status](https://travis-ci.org/cpearce/arm-rs.svg?branch=master)](https://travis-ci.org/cpearce/arm-rs)
+rusty-py-fim enables you to run fpgrowth in Python
 
-An implementation of association rule mining via the FPGrowth algorithm in Rust.
+# Setup
 
-This finds relationships of the form "people who buy X also buy Y",
-and also determines the strengths (confidence, lift, support) of those
-relationships.
+```bash
+pip install maturin
+maturin develop 
+```
 
-This implementation parallelizes FPGrowth using the [Rayon Rust crate](https://crates.io/crates/rayon).
+Running FIM in python
 
-For an overview of assocation rule mining,
-see Chapter 5 of Introduction to Data Mining, Kumar et al:
-[Association Analysis: Basic Concepts and Algorithms](https://www-users.cs.umn.edu/~kumar001/dmbook/ch5_association_analysis.pdf).
+```py
+from fim import fpgrowth
 
-To build, install Rust from [rustup.rs](https://rustup.rs/), then to build run:
+res = fpgrowth(min_support=0.3, transactions=[[1,2,3],[2,3,4],[3,4,10],[3,4,20]])
+```
 
-    cargo build --release
+Result:
 
-To run:
-
-    cargo run --release -- $ARGS
-
-For example:
-
-    cargo run --release -- \
-        --input datasets/kosarak.csv \
-        --output rules.txt \
-        --min-support 0.05 \
-        --min-confidence 0.05 \
-        --min-lift 5
-
-Input files are in CSV format, that is, one transaction of items per line, items separated by commas.
-
-To run tests:
-
-    cargo test
-
-Auto-format code via:
-
-    cargo fmt
+```
+First pass took 0 ms, num_transactions=4.
+Total runtime: 1 ms
+[([3], 4), ([3, 4], 3), ([4], 3)]
+```
