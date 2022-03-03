@@ -5,7 +5,6 @@ rusty-py-fim enables you to run fpgrowth in Python
 ```bash
 pip install maturin
 maturin develop
-maturin build
 ```
 
 ## Running FIM in python
@@ -22,4 +21,10 @@ Result:
 First pass took 0 ms, num_transactions=4.
 Total runtime: 1 ms
 [([3], 4), ([3, 4], 3), ([4], 3)]
+```
+
+## Build wheel
+
+```bash
+maturin build
 ```
