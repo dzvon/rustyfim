@@ -5,6 +5,7 @@ rusty-py-fim enables you to run fpgrowth in Python
 ```bash
 pip install maturin
 maturin develop
+maturin build
 ```
 
 ## Running FIM in python
