@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  push:
-  pull_request:
+  release:
+    types: [published]
 
 jobs:
   linux:
@@ -65,7 +65,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: "startsWith(github.ref, 'refs/tags/')"
     needs: [ macos, windows, linux, macos-universal2 ]
     steps:
       - uses: actions/download-artifact@v2
