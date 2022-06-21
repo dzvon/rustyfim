@@ -50,7 +50,7 @@ impl ItemCounter {
         v
     }
 
-    pub fn sort_descending(&self, v: &mut Vec<Item>) {
+    pub fn sort_descending(&self, v: &mut [Item]) {
         v.sort_by(|a, b| {
             let count_a = self.get(a);
             let count_b = self.get(b);

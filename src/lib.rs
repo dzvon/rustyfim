@@ -11,7 +11,7 @@ use bitmatrix::BitMatrix;
 
 
 fn duration_as_ms(duration: &Duration) -> u64 {
-    (duration.as_secs() * 1_000 as u64) + (duration.subsec_nanos() / 1_000_000) as u64
+    (duration.as_secs() * 1_000_u64) + duration.subsec_millis() as u64
 }
 
 fn count_item_frequencies(
@@ -48,14 +48,14 @@ fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemS
         // initial tree.
         let mut filtered_transaction = transaction
             .into_iter()
-            .map(|id| Item::with_id(id))
-            .filter(|item| item_count.get(&item) > min_count)
+            .map(Item::with_id)
+            .filter(|item| item_count.get(item) > min_count)
             .collect::<Vec<Item>>();
         item_count.sort_descending(&mut filtered_transaction);
         fptree.insert(&filtered_transaction, 1);
     }
 
-    let patterns: Vec<ItemSet> = fp_growth(&fptree, min_count, &vec![], num_transactions as u32);
+    let patterns: Vec<ItemSet> = fp_growth(&fptree, min_count, &[], num_transactions as u32);
 
     println!("Total runtime: {} ms", duration_as_ms(&start.elapsed()));
 
@@ -68,13 +68,13 @@ fn dci(min_support: f32, transactions: Vec<Vec<u32>>, n_features: usize) -> PyRe
     let start = Instant::now();
 
 	let n_transactions: usize = transactions.len();
-	let mut matrix: BitMatrix = BitMatrix::new(n_transactions, n_features);
+	let mut matrix: BitMatrix = BitMatrix::new(n_features, n_transactions);
 	for (i, transaction) in transactions.iter().enumerate() {
         for id in transaction.iter() {
-            matrix.set((i, *id as usize), true);
+            matrix.set((*id as usize, i), true);
         }
     }
-	
+
 	let min_sup: usize = (min_support * (n_transactions as f32)) as usize;
 	let result: Vec<(ItemSet8, usize)> = dciclosed::parallel::closed(&Matrix::from(matrix), min_sup).into_vec();
 

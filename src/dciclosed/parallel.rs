@@ -62,40 +62,38 @@ fn _closed<'a, D>(
 
 		let new_gen_cover = dataset.cover(&new_gen);
 
-		if dataset.support(&new_gen) >= min_sup {
-			if !is_dup(dataset, &new_gen_cover, &pre_set) {
-				let mut closed_set_new = new_gen.clone();
-				let mut post_set_new = D::ItemSet::empty();
+		if (dataset.support(&new_gen) >= min_sup) && (!is_dup(dataset, &new_gen_cover, &pre_set)) {
+			let mut closed_set_new = new_gen.clone();
+			let mut post_set_new = D::ItemSet::empty();
 
-				for j in post_set.into_iter().skip_while(|&j| i >= j) {
-					if dataset.supports(j, &new_gen_cover) {
-						closed_set_new.add(j);
-					} else {
-						post_set_new.add(j)
-					}
+			for j in post_set.into_iter().skip_while(|&j| i >= j) {
+				if dataset.supports(j, &new_gen_cover) {
+					closed_set_new.add(j);
+				} else {
+					post_set_new.add(j)
 				}
-
-				out.send((closed_set_new.clone(), dataset.support(&closed_set_new)))
-					// The receiver should never be closed before all tasks finish.
-					// If that happens for some extraordinary reason, propagate the panic to rayon.
-					.expect("Failed to send result");
-
-				let pre_set_new = pre_set.clone();
-
-				scope.spawn(move |scope| {
-					_closed(
-						dataset,
-						min_sup,
-						&closed_set_new,
-						pre_set_new,
-						&post_set_new,
-						out,
-						scope,
-					)
-				});
-
-				pre_set.add(i);
 			}
+
+			out.send((closed_set_new.clone(), dataset.support(&closed_set_new)))
+				// The receiver should never be closed before all tasks finish.
+				// If that happens for some extraordinary reason, propagate the panic to rayon.
+				.expect("Failed to send result");
+
+			let pre_set_new = pre_set.clone();
+
+			scope.spawn(move |scope| {
+				_closed(
+					dataset,
+					min_sup,
+					&closed_set_new,
+					pre_set_new,
+					&post_set_new,
+					out,
+					scope,
+				)
+			});
+
+			pre_set.add(i);
 		}
 	}
 }

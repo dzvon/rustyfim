@@ -23,7 +23,7 @@ impl Item {
         Item { id: 0 }
     }
     pub fn with_id(id: u32) -> Item {
-        Item { id: id }
+        Item { id }
     }
     pub fn as_index(&self) -> usize {
         self.id as usize

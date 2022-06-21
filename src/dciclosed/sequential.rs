@@ -57,40 +57,38 @@ where
 
 		let new_gen_cover = dataset.cover(&new_gen);
 
-		if dataset.support(&new_gen) >= min_sup {
-			if !is_dup(dataset, &new_gen_cover, &pre_set) {
-				let mut closed_set_new = new_gen.clone();
-				let mut post_set_new = D::ItemSet::empty();
+		if (dataset.support(&new_gen) >= min_sup) && (!is_dup(dataset, &new_gen_cover, &pre_set)) {
+			let mut closed_set_new = new_gen.clone();
+			let mut post_set_new = D::ItemSet::empty();
 
-				for j in post_set.into_iter().skip_while(|&j| i >= j) {
-					if dataset.supports(j, &new_gen_cover) {
-						closed_set_new.add(j);
-					}
-					else {
-						post_set_new.add(j)
-					}
+			for j in post_set.into_iter().skip_while(|&j| i >= j) {
+				if dataset.supports(j, new_gen_cover) {
+					closed_set_new.add(j);
 				}
-
-				out.push(
-					(
-						closed_set_new.clone(),
-						dataset.support(&closed_set_new)
-					)
-				);
-
-				let pre_set_new = pre_set.clone();
-
-				_closed(
-					dataset,
-					min_sup,
-					&closed_set_new,
-					pre_set_new,
-					&post_set_new,
-					out,
-				);
-
-				pre_set.add(i);
+				else {
+					post_set_new.add(j)
+				}
 			}
+
+			out.push(
+				(
+					closed_set_new.clone(),
+					dataset.support(&closed_set_new)
+				)
+			);
+
+			let pre_set_new = pre_set.clone();
+
+			_closed(
+				dataset,
+				min_sup,
+				&closed_set_new,
+				pre_set_new,
+				&post_set_new,
+				out,
+			);
+
+			pre_set.add(i);
 		}
 	}
 }
