@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::item::Item;
-use crate::item_counter::ItemCounter;
+use super::item::Item;
+use super::item_counter::ItemCounter;
 use itertools::sorted;
 use pyo3::prelude::*;
 use rayon::prelude::*;

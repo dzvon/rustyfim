@@ -2,13 +2,13 @@ use pyo3::prelude::{pyfunction, pymodule, wrap_pyfunction, PyModule, PyResult, P
 use std::error::Error;
 use std::time::{Duration, Instant};
 
-pub mod fptree;
-pub mod item;
-pub mod item_counter;
+mod fp;
+use fp::{fptree::{fp_growth, FPTree, ItemSet}, item::Item, item_counter::ItemCounter};
 
-use fptree::{fp_growth, FPTree, ItemSet};
-use item::Item;
-use item_counter::ItemCounter;
+mod dciclosed;
+use dciclosed::matrix::{Matrix, ItemSet8};
+use bitmatrix::BitMatrix;
+
 
 fn duration_as_ms(duration: &Duration) -> u64 {
     (duration.as_secs() * 1_000 as u64) + (duration.subsec_nanos() / 1_000_000) as u64
@@ -30,7 +30,7 @@ fn count_item_frequencies(
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
-fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemSet>> {
+fn fpg(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemSet>> {
     let start = Instant::now();
     let timer = Instant::now();
     let (item_count, num_transactions) = count_item_frequencies(&transactions).unwrap();
@@ -62,9 +62,31 @@ fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemS
     Ok(patterns)
 }
 
+/// Formats the sum of two numbers as string.
+#[pyfunction]
+fn dci(min_support: f32, transactions: Vec<Vec<u32>>, n_features: usize) -> PyResult<Vec<(ItemSet8, usize)>> {
+    let start = Instant::now();
+
+	let n_transactions: usize = transactions.len();
+	let mut matrix: BitMatrix = BitMatrix::new(n_transactions, n_features);
+	for (i, transaction) in transactions.iter().enumerate() {
+        for id in transaction.iter() {
+            matrix.set((i, *id as usize), true);
+        }
+    }
+	
+	let min_sup: usize = (min_support * (n_transactions as f32)) as usize;
+	let result: Vec<(ItemSet8, usize)> = dciclosed::parallel::closed(&Matrix::from(matrix), min_sup).into_vec();
+
+    println!("Total runtime: {} ms", duration_as_ms(&start.elapsed()));
+
+    Ok(result)
+}
+
 /// A Python module implemented in Rust.
 #[pymodule]
 fn rustyfim(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(fpgrowth, m)?)?;
+    m.add_function(wrap_pyfunction!(fpg, m)?)?;
+    m.add_function(wrap_pyfunction!(dci, m)?)?;
     Ok(())
 }
