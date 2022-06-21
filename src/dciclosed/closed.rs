@@ -48,7 +48,7 @@ where
 	for<'a> &'a D::ItemSet: IntoIterator<Item = usize>
 {
 	for item in pre_set.into_iter() {
-		if dataset.supports(item, &new_gen_cover) {
+		if dataset.supports(item, new_gen_cover) {
 			return true;
 		}
 	}

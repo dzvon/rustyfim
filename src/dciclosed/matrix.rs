@@ -79,18 +79,6 @@ impl<I> From<BitMatrix> for Matrix<I> {
 	}
 }
 
-impl<I> Into<BitMatrix> for Matrix<I> {
-	fn into(self) -> BitMatrix {
-		self.0
-	}
-}
-
-impl<'a, I> Into<&'a BitMatrix> for &'a Matrix<I> {
-	fn into(self) -> &'a BitMatrix {
-		&self.0
-	}
-}
-
 /// A itemset capable of storing up to 8 items. For test purposes only.
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct ItemSet8(u8);

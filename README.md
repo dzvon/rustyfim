@@ -30,3 +30,8 @@ Total runtime: 1 ms
 ```bash
 maturin build
 ```
+
+## Lint the project
+```
+cargo clippy
+```

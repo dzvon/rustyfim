@@ -77,7 +77,8 @@ impl FPTree {
         };
         // Add root.
         tree.add_node(0, Item::null());
-        return tree;
+
+        tree
     }
 
     pub fn add_node(&mut self, parent: usize, item: Item) -> usize {
@@ -193,7 +194,7 @@ impl FPTree {
     }
 }
 
-#[derive(Clone, Hash, PartialEq, Eq, Debug, Ord)]
+#[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub struct ItemSet {
     pub items: Vec<Item>,
     pub count: u32,
@@ -218,8 +219,8 @@ impl PartialOrd for ItemSet {
 impl ItemSet {
     pub fn new(items: Vec<Item>, count: u32) -> ItemSet {
         ItemSet {
-            items: sorted(items.iter().map(|&x| x)),
-            count: count,
+            items: sorted(items.iter().copied()),
+            count,
         }
     }
 
@@ -241,7 +242,7 @@ pub fn fp_growth(fptree: &FPTree, min_count: u32, path: &[Item], path_count: u32
             // The path to here plus this item must be above the minimum
             // support threshold.
             let mut itemset: Vec<Item> = Vec::from(path);
-            let new_path_count = cmp::min(path_count, fptree.item_count().get(&item));
+            let new_path_count = cmp::min(path_count, fptree.item_count().get(item));
             itemset.push(*item);
 
             let conditional_tree = fptree.construct_conditional_tree(*item);
