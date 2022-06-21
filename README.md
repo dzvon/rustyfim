@@ -1,4 +1,4 @@
-rusty-py-fim enables you to run fpgrowth in Python
+rusty-py-fim enables you to run frequent itemset mining algorithm (both fpgrowth that mines frequent itemset, and DCI algorithm that mines closed item sets) in Python
 
 ## Setup
 
