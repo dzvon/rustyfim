@@ -2,13 +2,13 @@ use pyo3::prelude::{pyfunction, pymodule, wrap_pyfunction, PyModule, PyResult, P
 use std::error::Error;
 use std::time::{Duration, Instant};
 
-mod fpgrowth;
-use fpgrowth::{fptree::{fp_growth, FPTree, ItemSet}, item::Item, item_counter::ItemCounter};
+mod fp;
+use fp::{fptree::{fp_growth, FPTree, ItemSet}, item::Item, item_counter::ItemCounter};
 
 mod dciclosed;
 use dciclosed::matrix::{Matrix, ItemSet8};
-
 use bitmatrix::BitMatrix;
+
 
 fn duration_as_ms(duration: &Duration) -> u64 {
     (duration.as_secs() * 1_000 as u64) + (duration.subsec_nanos() / 1_000_000) as u64
