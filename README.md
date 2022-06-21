@@ -10,9 +10,11 @@ maturin develop
 ## Running FIM in python
 
 ```py
-from rustyfim import fpgrowth
+from rustyfim import fpgrowth, dci
 
 res = fpgrowth(min_support=0.3, transactions=[[1,2,3],[2,3,4],[3,4,10],[3,4,20]])
+# in dci algorithm, n_features is required for creating the bitmatrix in the first place
+res = dci(min_support=0.3, transactions=[[1,2,3],[2,3,4],[3,4,10],[3,4,20]], n_features=21)
 ```
 
 Result:
