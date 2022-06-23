@@ -1,4 +1,5 @@
 pub mod matrix;
+pub mod itemset;
 pub mod parallel;
 pub mod closed;
 

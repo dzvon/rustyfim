@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.16.4", features = ["extension-module"] }
-bitvec = { version = "0.19.6", optional = true }
+bitvec = { version = "0.19", optional = true }
 bitmatrix = { version = "0.1", optional = true }
 rayon = "1.5.2"
 itertools = "0.6.1"

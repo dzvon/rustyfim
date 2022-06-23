@@ -6,7 +6,7 @@ mod fp;
 use fp::{fptree::{fp_growth, FPTree, ItemSet}, item::Item, item_counter::ItemCounter};
 
 mod dciclosed;
-use dciclosed::matrix::{Matrix, ItemSet8};
+use dciclosed::{matrix::{Matrix}, itemset::ItemSet as ItemSetClosed};
 use bitmatrix::BitMatrix;
 
 
@@ -64,7 +64,7 @@ fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemS
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
-fn dci(min_support: f32, transactions: Vec<Vec<u32>>, n_features: usize) -> PyResult<Vec<(ItemSet8, usize)>> {
+fn dci(min_support: f32, transactions: Vec<Vec<u32>>, n_features: usize) -> PyResult<Vec<(ItemSetClosed, usize)>> {
     let start = Instant::now();
 
 	let n_transactions: usize = transactions.len();
@@ -76,7 +76,7 @@ fn dci(min_support: f32, transactions: Vec<Vec<u32>>, n_features: usize) -> PyRe
     }
 
 	let min_sup: usize = (min_support * (n_transactions as f32)) as usize;
-	let result: Vec<(ItemSet8, usize)> = dciclosed::parallel::closed(&Matrix::from(matrix), min_sup).into_vec();
+	let result: Vec<(ItemSetClosed, usize)> = dciclosed::parallel::closed(&Matrix::from(matrix), min_sup).into_vec();
 
     println!("Total runtime: {} ms", duration_as_ms(&start.elapsed()));
 
