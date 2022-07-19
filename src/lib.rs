@@ -3,12 +3,15 @@ use std::error::Error;
 use std::time::{Duration, Instant};
 
 mod fp;
-use fp::{fptree::{fp_growth, FPTree, ItemSet}, item::Item, item_counter::ItemCounter};
+use fp::{
+    fptree::{fp_growth, FPTree, ItemSet},
+    item::Item,
+    item_counter::ItemCounter,
+};
 
 mod dciclosed;
-use dciclosed::{matrix::{Matrix}, itemset::ItemSet as ItemSetClosed};
 use bitmatrix::BitMatrix;
-
+use dciclosed::{itemset::ItemSet as ItemSetClosed, matrix::Matrix};
 
 fn duration_as_ms(duration: &Duration) -> u64 {
     (duration.as_secs() * 1_000_u64) + duration.subsec_millis() as u64
@@ -64,19 +67,24 @@ fn fpgrowth(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<ItemS
 
 /// Formats the sum of two numbers as string.
 #[pyfunction]
-fn dci(min_support: f32, transactions: Vec<Vec<u32>>, n_features: usize) -> PyResult<Vec<(ItemSetClosed, usize)>> {
+fn dci(
+    min_support: f32,
+    transactions: Vec<Vec<u32>>,
+    n_features: usize,
+) -> PyResult<Vec<(ItemSetClosed, usize)>> {
     let start = Instant::now();
 
-	let n_transactions: usize = transactions.len();
-	let mut matrix: BitMatrix = BitMatrix::new(n_features, n_transactions);
-	for (i, transaction) in transactions.iter().enumerate() {
+    let n_transactions: usize = transactions.len();
+    let mut matrix: BitMatrix = BitMatrix::new(n_features, n_transactions);
+    for (i, transaction) in transactions.iter().enumerate() {
         for id in transaction.iter() {
             matrix.set((*id as usize, i), true);
         }
     }
 
-	let min_sup: usize = (min_support * (n_transactions as f32)) as usize;
-	let result: Vec<(ItemSetClosed, usize)> = dciclosed::parallel::closed(&Matrix::from(matrix), min_sup).into_vec();
+    let min_sup: usize = (min_support * (n_transactions as f32)) as usize;
+    let result: Vec<(ItemSetClosed, usize)> =
+        dciclosed::parallel::closed(&Matrix::from(matrix), min_sup).into_vec();
 
     println!("Total runtime: {} ms", duration_as_ms(&start.elapsed()));
 

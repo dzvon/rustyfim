@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
-use bitvec::{boxed::BitBox, vec::BitVec};
 use bitmatrix::BitMatrix;
+use bitvec::{boxed::BitBox, vec::BitVec};
 
 use super::{DataSet, ItemSet};
 
@@ -25,54 +25,54 @@ pub struct Matrix<I>(pub BitMatrix, PhantomData<I>);
 
 impl<I> DataSet for Matrix<I>
 where
-	I: ItemSet,
-	for<'a> &'a I: IntoIterator<Item = usize>,
+    I: ItemSet,
+    for<'a> &'a I: IntoIterator<Item = usize>,
 {
-	type ItemSet = I;
-	type Cover = BitBox;
+    type ItemSet = I;
+    type Cover = BitBox;
 
-	fn items_count(&self) -> usize {
-		self.0.height()
-	}
+    fn items_count(&self) -> usize {
+        self.0.height()
+    }
 
-	fn transactions_count(&self) -> usize {
-		self.0.width()
-	}
+    fn transactions_count(&self) -> usize {
+        self.0.width()
+    }
 
-	fn item_support(&self, item: usize) -> usize {
-		self.0[item].count_ones()
-	}
+    fn item_support(&self, item: usize) -> usize {
+        self.0[item].count_ones()
+    }
 
-	fn support(&self, itemset: &Self::ItemSet) -> usize {
-		self.cover(itemset).count_ones()
-	}
+    fn support(&self, itemset: &Self::ItemSet) -> usize {
+        self.cover(itemset).count_ones()
+    }
 
-	fn supports(&self, item: usize, cover: &Self::Cover) -> bool {
-		let item_iter = self.0[item].iter();
-		let cover_iter = cover.iter();
+    fn supports(&self, item: usize, cover: &Self::Cover) -> bool {
+        let item_iter = self.0[item].iter();
+        let cover_iter = cover.iter();
 
-		item_iter.zip(cover_iter).all(|(&a, &b)| (!b) || a)
-	}
+        item_iter.zip(cover_iter).all(|(&a, &b)| (!b) || a)
+    }
 
-	fn cover(&self, itemset: &Self::ItemSet) -> Self::Cover {
-		let length = self.transactions_count();
+    fn cover(&self, itemset: &Self::ItemSet) -> Self::Cover {
+        let length = self.transactions_count();
 
-		let mut cover = {
-			let mut vec = BitVec::with_capacity(length);
-			vec.resize(length, true);
-			vec.into_boxed_bitslice()
-		};
+        let mut cover = {
+            let mut vec = BitVec::with_capacity(length);
+            vec.resize(length, true);
+            vec.into_boxed_bitslice()
+        };
 
-		for item in itemset.into_iter() {
-			cover &= self.0[item].iter().copied();
-		}
+        for item in itemset.into_iter() {
+            cover &= self.0[item].iter().copied();
+        }
 
-		cover
-	}
+        cover
+    }
 }
 
 impl<I> From<BitMatrix> for Matrix<I> {
-	fn from(matrix: BitMatrix) -> Self {
-		Matrix(matrix, PhantomData)
-	}
+    fn from(matrix: BitMatrix) -> Self {
+        Matrix(matrix, PhantomData)
+    }
 }
