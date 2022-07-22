@@ -3,6 +3,7 @@ use std::error::Error;
 use std::time::{Duration, Instant};
 
 mod fp;
+mod neclatclosed;
 use fp::{
     fptree::{fp_growth, FPTree, ItemSet},
     item::Item,
@@ -90,6 +91,8 @@ fn dci(
 
     Ok(result)
 }
+
+fn neclat(min_support: f32, transactions: Vec<Vec<u32>>) {}
 
 /// A Python module implemented in Rust.
 #[pymodule]
