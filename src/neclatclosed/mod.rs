@@ -208,10 +208,17 @@ impl NEclatClosed {
             sibling = s.borrow().next.clone();
         }
 
-        let itemset_bitvec = BitVector::new(&self.itemset_x, self.itemset_x_len);
+        let itemset_bitmap = RoaringBitmap::from_iter(
+            self.itemset_x
+                .iter()
+                .take(self.itemset_x_len)
+                .map(|&x| x as u32),
+        );
+
+        // let itemset_bitvec = BitVector::new(&self.itemset_x, self.itemset_x_len);
         if self
             .cp_storage
-            .insert_if_close(itemset_bitvec, curr.borrow().count)
+            .insert_if_close(itemset_bitmap, curr.borrow().count)
         {
             // create a stringbuffer
             let mut indices = Vec::with_capacity(self.itemset_x_len);

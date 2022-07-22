@@ -1,16 +1,17 @@
 use std::collections::HashMap;
 
 use super::bitvector::BitVector;
+use roaring::RoaringBitmap;
 
 #[derive(Default)]
-pub struct CPStorage(HashMap<usize, Vec<BitVector>>);
+pub struct CPStorage(HashMap<usize, Vec<RoaringBitmap>>);
 
 impl CPStorage {
     pub fn new() -> CPStorage {
         CPStorage(HashMap::new())
     }
 
-    pub fn insert_if_close(&mut self, itemset_bitvector: BitVector, support: usize) -> bool {
+    pub fn insert_if_close(&mut self, itemset_bitvector: RoaringBitmap, support: usize) -> bool {
         let mut result = true;
 
         match self.0.get_mut(&support) {
@@ -18,7 +19,7 @@ impl CPStorage {
                 let mut index = 0;
 
                 for q in list.iter() {
-                    if itemset_bitvector.cardinality >= q.cardinality {
+                    if itemset_bitvector.len() >= q.len() {
                         break;
                     }
                     if itemset_bitvector.is_subset(q) {
