@@ -1,16 +1,12 @@
 use std::collections::HashMap;
 
 use super::bitvector::BitVector;
-use fnv::{FnvBuildHasher, FnvHashMap};
+use fnv::FnvBuildHasher;
 
 #[derive(Default)]
 pub struct CPStorage(HashMap<usize, Vec<BitVector>, FnvBuildHasher>);
 
 impl CPStorage {
-    pub fn new() -> CPStorage {
-        CPStorage(FnvHashMap::default())
-    }
-
     pub fn insert_if_close(&mut self, itemset_bitvector: BitVector, support: usize) -> bool {
         let mut result = true;
 

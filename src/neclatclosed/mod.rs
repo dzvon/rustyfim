@@ -1,19 +1,18 @@
-//! NElcatClosed algorithm implementation.
+//! NEclatClosed algorithm implementation.
 
 mod bitvector;
 mod cpstorage;
-
-use std::{cell::RefCell, collections::HashMap, rc::Rc};
-
-use roaring::RoaringBitmap;
-
-use bitvector::BitVector;
+mod itemset;
 
 use self::cpstorage::CPStorage;
+use bitvector::BitVector;
+use roaring::RoaringBitmap;
+use std::{cell::RefCell, collections::HashMap, rc::Rc};
+
+pub use self::itemset::ItemSet;
 
 #[derive(Default)]
-struct NEclatClosed {
-    output_cnt: usize,   // number of itemsets found
+pub struct NEclatClosed {
     num_of_items: usize, // number of items
     min_support: usize,  // minimum support threshold
     items: Vec<Item>,    // list of items sorted by count
@@ -39,18 +38,6 @@ struct Item {
     num: usize, // number of times item appears in transactions
 }
 
-#[derive(Debug, PartialEq, Eq)]
-struct ItemSet {
-    indices: Vec<usize>,
-    support: usize,
-}
-
-impl ItemSet {
-    pub fn new(indices: Vec<usize>, support: usize) -> ItemSet {
-        ItemSet { indices, support }
-    }
-}
-
 #[derive(Default, Debug)]
 struct TreeNode {
     label: usize,
@@ -59,6 +46,7 @@ struct TreeNode {
     tid_set: RoaringBitmap,
     count: usize,
 }
+
 impl NEclatClosed {
     /// Run the algorithm.
     pub fn process(mut self, transactions: &Vec<Vec<usize>>, min_support: f32) -> Vec<ItemSet> {

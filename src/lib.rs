@@ -9,6 +9,7 @@ use fp::{
     item::Item,
     item_counter::ItemCounter,
 };
+use neclatclosed::{ItemSet as NeclatClosedItemSet, NEclatClosed};
 
 mod dciclosed;
 use bitmatrix::BitMatrix;
@@ -92,12 +93,20 @@ fn dci(
     Ok(result)
 }
 
-fn neclat(min_support: f32, transactions: Vec<Vec<u32>>) {}
+#[pyfunction]
+fn neclat(min_support: f32, transactions: Vec<Vec<usize>>) -> PyResult<Vec<NeclatClosedItemSet>> {
+    let neclat = NEclatClosed::default();
+
+    let result = neclat.process(&transactions, min_support);
+
+    Ok(result)
+}
 
 /// A Python module implemented in Rust.
 #[pymodule]
 fn rustyfim(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(fpgrowth, m)?)?;
     m.add_function(wrap_pyfunction!(dci, m)?)?;
+    m.add_function(wrap_pyfunction!(neclat, m)?)?;
     Ok(())
 }
