@@ -37,11 +37,9 @@ impl BitVector {
             return false;
         }
 
-        for i in 0..self.bits.len() {
-            if self.bits[i] & (!other.bits[i]) != 0 {
-                return false;
-            }
-        }
-        true
+        self.bits
+            .iter()
+            .zip(other.bits.iter())
+            .all(|(a, b)| a & b == *a)
     }
 }
