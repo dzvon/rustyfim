@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 name = "rustyfim"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 pyo3 = { version = "0.16.4", features = ["extension-module"] }
@@ -24,3 +24,6 @@ default = ["bitmatrix", "bitvec"]
 
 [profile.release]
 debug = true
+
+[workspace]
+members = ["bench"]

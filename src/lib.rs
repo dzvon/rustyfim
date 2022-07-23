@@ -9,7 +9,8 @@ use fp::{
     item::Item,
     item_counter::ItemCounter,
 };
-use neclatclosed::{ItemSet as NeclatClosedItemSet, NEclatClosed};
+use neclatclosed::ItemSet as NeclatClosedItemSet;
+pub use neclatclosed::NEclatClosed;
 
 mod dciclosed;
 use bitmatrix::BitMatrix;
