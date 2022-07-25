@@ -95,7 +95,7 @@ fn dci(
 }
 
 #[pyfunction]
-fn neclat(min_support: f32, transactions: Vec<Vec<usize>>) -> PyResult<Vec<NeclatClosedItemSet>> {
+fn neclat(min_support: f32, transactions: Vec<Vec<u32>>) -> PyResult<Vec<NeclatClosedItemSet>> {
     let neclat = NEclatClosed::default();
 
     let result = neclat.process(&transactions, min_support);

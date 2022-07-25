@@ -49,7 +49,7 @@ struct TreeNode {
 
 impl NEclatClosed {
     /// Run the algorithm.
-    pub fn process(mut self, transactions: &Vec<Vec<usize>>, min_support: f32) -> Vec<ItemSet> {
+    pub fn process(mut self, transactions: &Vec<Vec<u32>>, min_support: f32) -> Vec<ItemSet> {
         // Read Dataset
         self.get_data(transactions, min_support);
 
@@ -76,7 +76,7 @@ impl NEclatClosed {
     }
 
     /// Read dataset to find the frequent items.
-    fn get_data(&mut self, transactions: &Vec<Vec<usize>>, min_support: f32) {
+    fn get_data(&mut self, transactions: &Vec<Vec<u32>>, min_support: f32) {
         self.num_of_transactions = 0;
 
         // (1) Scan the database and count the count of each item.
@@ -86,7 +86,7 @@ impl NEclatClosed {
         for transaction in transactions {
             self.num_of_transactions += 1;
             for id in transaction {
-                let count = item_count.entry(*id).or_insert(0);
+                let count = item_count.entry(*id as usize).or_insert(0);
                 *count += 1;
             }
         }
@@ -109,13 +109,13 @@ impl NEclatClosed {
     }
 
     /// Build the tree.
-    fn build_tree(&mut self, transactions: &[Vec<usize>]) {
+    fn build_tree(&mut self, transactions: &[Vec<u32>]) {
         for (tid, transaction) in transactions.iter().enumerate() {
             for id in transaction {
                 // Add each item from the transaction except infrequent item
                 for (i, item) in self.items.iter().enumerate() {
                     // If the item appears in the list of frequent items, we add it
-                    if item.index == *id {
+                    if item.index == *id as usize {
                         // Get the current tidset of that item, if it doesn't exist, create it
                         let tids = self.item_tids.entry(i).or_insert_with(RoaringBitmap::new);
                         // We add the current transaction id to the tidset of the item
@@ -255,7 +255,7 @@ mod test {
         for line in reader.lines() {
             if let Ok(line) = line {
                 let line = line.split_whitespace().collect::<Vec<&str>>();
-                transactions.push(line.iter().map(|x| x.parse::<usize>().unwrap()).collect());
+                transactions.push(line.iter().map(|x| x.parse::<u32>().unwrap()).collect());
             }
         }
 

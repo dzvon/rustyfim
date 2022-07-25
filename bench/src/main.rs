@@ -30,7 +30,7 @@ fn main() {
     for line in reader.lines() {
         if let Ok(line) = line {
             let line = line.split_whitespace().collect::<Vec<&str>>();
-            transactions.push(line.iter().map(|x| x.parse::<usize>().unwrap()).collect());
+            transactions.push(line.iter().map(|x| x.parse::<u32>().unwrap()).collect());
         }
     }
 
