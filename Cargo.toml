@@ -10,11 +10,6 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 pyo3 = "0.16.4"
-bitvec = "0.19"
-bitmatrix = "0.1"
-rayon = "1.5.2"
-itertools = "0.6.1"
-argparse = "*"
 fnv = "1.0.6"
 lazy_static = "1.4.0"
 roaring = { version = "0.9.0", features = ["simd"] }
@@ -27,7 +22,7 @@ extension-module = ["pyo3/extension-module"]
 default = ["extension-module"]
 
 [profile.release]
-debug = true
+# debug = true
 
 [workspace]
 members = ["bench"]
