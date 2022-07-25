@@ -41,5 +41,12 @@ impl BitVector {
             .iter()
             .zip(other.bits.iter())
             .all(|(a, b)| a & b == *a)
+
+        // for i in 0..self.bits.len() {
+        //     if a & (!b) != 0 {
+        //         return false;
+        //     }
+        // }
+        // true
     }
 }
