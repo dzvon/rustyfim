@@ -13,11 +13,11 @@ pub use self::itemset::ItemSet;
 
 #[derive(Default)]
 pub struct NEclatClosed {
-    num_of_items: usize, // number of items
-    min_support: usize,  // minimum support threshold
-    items: Vec<Item>,    // list of items sorted by count
+    n_items: usize,     // number of items
+    min_support: usize, // minimum support threshold
+    items: Vec<Item>,   // list of items sorted by count
 
-    num_of_transactions: usize, // number of transactions
+    n_transactions: usize, // number of transactions
 
     itemset_x: Vec<usize>, // the current itemset
     itemset_x_len: usize,  // the length of the current itemset
@@ -53,7 +53,7 @@ impl NEclatClosed {
         // Read Dataset
         self.get_data(transactions, min_support);
 
-        self.itemset_x = vec![0; self.num_of_items];
+        self.itemset_x = vec![0; self.n_items];
 
         // Build tree
         self.build_tree(transactions);
@@ -77,21 +77,21 @@ impl NEclatClosed {
 
     /// Read dataset to find the frequent items.
     fn get_data(&mut self, transactions: &Vec<Vec<u32>>, min_support: f32) {
-        self.num_of_transactions = 0;
+        self.n_transactions = 0;
 
         // (1) Scan the database and count the count of each item.
         // The count of items is stored in map where
         // key = item value => count count
         let mut item_count: HashMap<usize, usize> = HashMap::new();
         for transaction in transactions {
-            self.num_of_transactions += 1;
+            self.n_transactions += 1;
             for id in transaction {
                 let count = item_count.entry(*id as usize).or_insert(0);
                 *count += 1;
             }
         }
 
-        self.min_support = (min_support * (self.num_of_transactions as f32)).ceil() as usize;
+        self.min_support = (min_support * (self.n_transactions as f32)).ceil() as usize;
 
         for (id, count) in item_count {
             if count >= self.min_support {
@@ -102,7 +102,7 @@ impl NEclatClosed {
             }
         }
 
-        self.num_of_items = self.items.len();
+        self.n_items = self.items.len();
 
         // Sort the items by decreasing order of frequency.
         self.items.sort_by(|a, b| b.num.cmp(&a.num));
@@ -129,7 +129,7 @@ impl NEclatClosed {
 
     /// Initialize the tree.
     fn init_tree(&mut self) {
-        self.nl_root.label = self.num_of_items;
+        self.nl_root.label = self.n_items;
 
         let mut last_child = None;
 
