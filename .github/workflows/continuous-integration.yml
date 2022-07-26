@@ -14,7 +14,7 @@ jobs:
       with:
         manylinux: "2014"
         command: build
-        args: --release -o dist -i python3.10
+        args: --release -o dist -i python3.10 --features simd
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
@@ -28,7 +28,7 @@ jobs:
     - uses: messense/maturin-action@v1
       with:
         command: build
-        args: --release -o dist -i python3.10
+        args: --release -o dist -i python3.10 --features simd
         target: aarch64-apple-darwin
     - name: Upload wheels
       uses: actions/upload-artifact@v2
@@ -43,7 +43,7 @@ jobs:
     - uses: messense/maturin-action@v1
       with:
         command: build
-        args: --release -o dist -i python3.10
+        args: --release -o dist -i python3.10 --features simd
         target: x86_64-apple-darwin
     - name: Upload wheels
       uses: actions/upload-artifact@v2
