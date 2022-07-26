@@ -1,0 +1,52 @@
+name: continuous-integration
+
+on:
+  push:
+    branches:
+      - '@dezhi/neclatclosed'
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: messense/maturin-action@v1
+      with:
+        manylinux: auto
+        command: build
+        args: --release -o dist
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: dist
+
+  macos-aarch64:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: messense/maturin-action@v1
+      with:
+        command: build
+        args: --release -o dist
+        target: aarch64-apple-darwin
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: dist
+
+  macos-amd64:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: messense/maturin-action@v1
+      with:
+        command: build
+        args: --release -o dist
+        target: x86_64-apple-darwin
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: dist
