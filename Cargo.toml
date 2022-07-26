@@ -12,13 +12,14 @@ crate-type = ["cdylib", "lib"]
 pyo3 = "0.16.4"
 fnv = "1.0.6"
 lazy_static = "1.4.0"
-roaring = { version = "0.9.0", features = ["simd"] }
+roaring = "0.9.0"
 
 [build-dependencies]
 pyo3-build-config = { version = "0.16.5", features = ["extension-module"] }
 
 [features]
 extension-module = ["pyo3/extension-module"]
+simd = ["roaring/simd"]
 default = ["extension-module"]
 
 [profile.release]

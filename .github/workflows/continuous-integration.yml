@@ -14,7 +14,6 @@ jobs:
       with:
         manylinux: auto
         command: build
-        rust-toolchain: nightly
         args: --release -o dist
     - name: Upload wheels
       uses: actions/upload-artifact@v2
@@ -29,7 +28,6 @@ jobs:
     - uses: messense/maturin-action@v1
       with:
         command: build
-        rust-toolchain: nightly
         args: --release -o dist
         target: aarch64-apple-darwin
     - name: Upload wheels
@@ -45,7 +43,6 @@ jobs:
     - uses: messense/maturin-action@v1
       with:
         command: build
-        rust-toolchain: nightly
         args: --release -o dist
         target: x86_64-apple-darwin
     - name: Upload wheels
