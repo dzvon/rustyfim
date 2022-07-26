@@ -5,6 +5,9 @@ on:
     branches:
       - '@dezhi/neclatclosed'
 
+env:
+  PYO3_PYTHON: python3.10
+
 jobs:
   linux:
     runs-on: ubuntu-latest
