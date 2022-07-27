@@ -4,8 +4,7 @@ rm -rf /tmp/pgo-data
 
 RUSTFLAGS="-Cprofile-generate=/tmp/pgo-data" cargo run --release --target $1 -p bench --features=simd -- -m 0.4 ./tests/data/chess.dat
 
-sudo apt update
-apt install -y llvm
+bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 
 llvm-profdata merge -o /tmp/pgo-data/merged.profdata /tmp/pgo-data
 
