@@ -23,7 +23,7 @@ simd = ["roaring/simd"]
 default = ["extension-module"]
 
 [profile.release]
-# debug = true
+lto = true
 
 [workspace]
 members = ["bench"]

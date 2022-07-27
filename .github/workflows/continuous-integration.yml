@@ -11,10 +11,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: messense/maturin-action@v1
-      with:
-        manylinux: "2014"
-        command: build
-        args: --release -o dist -i python3.10 --features simd
+      run: rm -rf /tmp/pgo-data
+      run: RUSTFLAGS="-Cprofile-generate=/tmp/pgo-data" cargo run --release -p bench --features=simd -- -m 0.4 ./tests/data/chess.dat
+      run: maturin build --release --features simd -o dist -i python3.10 -- -Cprofile-use=/tmp/pgo-data/merged.profdata
+      # with:
+      #   manylinux: "2014"
+      #   command: build
+      #   args: --release -o dist -i python3.10 --features simd
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
