@@ -19,7 +19,7 @@ jobs:
       with:
         manylinux: "2014"
         command: list-python
-    - run: ./pgo.sh x86_64-unknown-linux-gnu
+    - run: bash ./pgo.sh x86_64-unknown-linux-gnu
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
