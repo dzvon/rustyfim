@@ -13,13 +13,13 @@ jobs:
     - name: Install LLVM and Clang
       uses: KyleMayes/install-llvm-action@v1
       with:
-        version: "10.0"
+        version: "14.0"
     - run: llvm-config --version
     - uses: messense/maturin-action@v1
       with:
         manylinux: "2014"
-        command: build
-        args: --release -o dist -i python3.10 --features simd
+        command: list-python
+    - run: ./pgo.sh x86_64-unknown-linux-gnu
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
